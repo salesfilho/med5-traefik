@@ -1,0 +1,30 @@
+api:
+  dashboard: true
+  insecure: true  # Em produção, use autenticação
+
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+          permanent: true
+  https:
+    address: ":443"
+
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    filename: /etc/traefik/dynamic_conf.yml
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: salesfilho@med5.com.br
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: http
+        

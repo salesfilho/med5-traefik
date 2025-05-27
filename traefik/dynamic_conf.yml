@@ -1,0 +1,40 @@
+http:
+  middlewares:
+    secure-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        contentTypeNosniff: true
+        browserXssFilter: true
+    
+    auth-middleware:
+      basicAuth:
+        users:
+          - "usuario:$apr1$9b6t3X9a$SdJ4rHrZ6N.7Q0w2p4L1k/"  # Substitua pelo seu hash
+
+    api-strip-prefix:
+      stripPrefix:
+        prefixes:
+          - "/api"
+
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+
+  routers:
+    traefik-dashboard:
+      rule: Host(`monitor.med5.com.br`)  # Use seu domínio
+      entryPoints:
+        - "https"
+      middlewares:
+        - auth-middleware
+        - secure-headers
+      service: api@internal
+      tls:
+        certResolver: letsencrypt
+
+    
