@@ -21,12 +21,6 @@ services:
       - med5-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`monitor.med5.com.br`)"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.traefik.middlewares=authtraefik"
 
   api:
     image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/backend:test
@@ -84,4 +78,3 @@ networks:
 volumes:
   redis_data:
     driver: local
-    

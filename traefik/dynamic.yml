@@ -24,3 +24,12 @@ http:
       rateLimit:
         average: 100
         burst: 50
+
+  routers:
+    traefik-router:
+      entryPoints: ["websecure"]
+      rule: "Host(`monitor.med5.com.br`)"
+      service: "api@internal"
+      middlewares: ["authtraefik"]
+      tls:
+        certResolver: "letsencrypt"
