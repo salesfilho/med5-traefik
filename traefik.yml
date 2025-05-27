@@ -19,7 +19,7 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    network: med5-network # Optional; Only use the "proxy" Docker network, even if containers are on multiple networks.
+    network: frontend # Optional; Only use the "proxy" Docker network, even if containers are on multiple networks.
 certificatesResolvers:
   letencrypt:
     acme:
