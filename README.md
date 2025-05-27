@@ -36,7 +36,7 @@ med5-docker-traefik/
 1. **Clone the repository:**
     ```bash
     git clone https://github.com/yourusername/med5-docker-traefik.git
-    cd med5-docker-traefik
+    cd med5-traefik
     ```
 
 2. **Configure environment variables:**  

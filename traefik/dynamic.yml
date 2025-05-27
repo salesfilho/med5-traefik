@@ -1,0 +1,35 @@
+http:
+  middlewares:
+    authtraefik:
+      basicAuth:
+        users:
+          - "usuario:$2y$05$MBC2h4.kdM9D6WZTEVQj0.XeGxE/7Dz7qN3JtY6x1UZKUu5Jb9QaO"  # usuario:senha
+          # Gerar com: htpasswd -nbB usuario senha | openssl base64
+
+    securedHeaders:
+      headers:
+        sslRedirect: true
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        contentSecurityPolicy: "default-src 'self'"
+
+    compress:
+      compress: true
+
+  routers:
+    api-router:
+      entryPoints: ["websecure"]
+      rule: "Host(`monitor.med5.com.br`)"
+      service: "api@internal"
+      middlewares:
+        - "authtraefik"
+        - "securedHeaders"
+      tls:
+        certResolver: "myresolver"
+        domains:
+          - main: "med5.com.br"
+            sans: ["*.med5.com.br"]

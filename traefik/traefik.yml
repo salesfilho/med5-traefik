@@ -1,30 +1,50 @@
+# Configuração global
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# Configuração da API e Dashboard
 api:
   dashboard: true
-  insecure: true  # Em produção, use autenticação
+  insecure: true # true Desabilitar acesso inseguro ao dashboard
+  debug: true # true Habilitar logs de depuração
 
+# Pontos de entrada
 entryPoints:
-  http:
+  web:
     address: ":80"
     http:
       redirections:
         entryPoint:
-          to: https
+          to: websecure
           scheme: https
           permanent: true
-  https:
-    address: ":443"
 
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        certResolver: myresolver
+        domains:
+          - main: "med5.com.br"
+            sans:
+              - "*.med5.com.br"
+
+# Provedores
 providers:
   docker:
     exposedByDefault: false
+    network: med5-network
+    watch: true
   file:
-    filename: /etc/traefik/dynamic_conf.yml
+    filename: "/etc/traefik/dynamic.yml"
+    watch: true
 
+# Resolvedores de certificados
 certificatesResolvers:
-  letsencrypt:
+  myresolver:
     acme:
-      email: salesfilho@med5.com.br
-      storage: /letsencrypt/acme.json
+      email: "salesfilho@med5.com.br"
+      storage: "/letsencrypt/acme.json"
       httpChallenge:
-        entryPoint: http
-        
+        entryPoint: "web"
