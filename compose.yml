@@ -21,12 +21,12 @@ services:
       - med5-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`monitor.med5.com.br`)"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
-      - "traefik.http.routers.traefik.middlewares=authtraefik"
+      - "traefik.web.routers.traefik.rule=Host(`monitor.med5.com.br`)"
+      - "traefik.web.routers.traefik.service=api@internal"
+      - "traefik.web.routers.traefik.entrypoints=websecure"
+      - "traefik.web.routers.traefik.tls=true"
+      - "traefik.web.routers.traefik.tls.certresolver=myresolver"
+      - "traefik.web.routers.traefik.middlewares=authtraefik"
 
   # Backend API
   api:
@@ -38,11 +38,11 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`h-backend.med5.com.br`) || PathPrefix(`/api`)"
-      - "traefik.http.routers.api.entrypoints=https"
-      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.api.middlewares=secure-headers,api-strip-prefix,rate-limit"
-      - "traefik.http.services.api.loadbalancer.server.port=8000" # Ajuste conforme sua API
+      - "traefik.web.routers.api.rule=Host(`h-backend.med5.com.br`) || PathPrefix(`/api`)"
+      - "traefik.web.routers.api.entrypoints=https"
+      - "traefik.web.routers.api.tls.certresolver=letsencrypt"
+      - "traefik.web.routers.api.middlewares=secure-headers,api-strip-prefix,rate-limit"
+      - "traefik.web.services.api.loadbalancer.server.port=8000" # Ajuste conforme sua API
     networks:
       - med5-network
     depends_on:
@@ -58,11 +58,11 @@ services:
       - API_URL=https://api.med5.exemplo.com
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`h-app.med5.com.br`)"
-      - "traefik.http.routers.app.entrypoints=https"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.app.middlewares=secure-headers"
-      - "traefik.http.services.app.loadbalancer.server.port=80"
+      - "traefik.web.routers.app.rule=Host(`h-app.med5.com.br`)"
+      - "traefik.web.routers.app.entrypoints=https"
+      - "traefik.web.routers.app.tls.certresolver=letsencrypt"
+      - "traefik.web.routers.app.middlewares=secure-headers"
+      - "traefik.web.services.app.loadbalancer.server.port=80"
     networks:
       - med5-network
     depends_on:
