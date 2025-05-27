@@ -1,12 +1,11 @@
-web:
+http:
   middlewares:
     authtraefik:
       basicAuth:
         users:
-          - "usuario:$2y$05$MBC2h4.kdM9D6WZTEVQj0.XeGxE/7Dz7qN3JtY6x1UZKUu5Jb9QaO"  # usuario:senha
-          # Gerar com: htpasswd -nbB usuario senha | openssl base64
+          - "usuario:$2y$05$MBC2h4.kdM9D6WZTEVQj0.XeGxE/7Dz7qN3JtY6x1UZKUu5Jb9QaO" # Substitua pelo seu hash
 
-    securedHeaders:
+    secure-headers:
       headers:
         sslRedirect: true
         stsSeconds: 31536000
@@ -15,21 +14,13 @@ web:
         frameDeny: true
         contentTypeNosniff: true
         browserXssFilter: true
-        contentSecurityPolicy: "default-src 'self'"
 
-    compress:
-      compress: true
+    api-strip-prefix:
+      stripPrefix:
+        prefixes:
+          - "/api"
 
-  routers:
-    api-router:
-      entryPoints: ["websecure"]
-      rule: "Host(`monitor.med5.com.br`)"
-      service: "api@internal"
-      middlewares:
-        - "authtraefik"
-        - "securedHeaders"
-      tls:
-        certResolver: "myresolver"
-        domains:
-          - main: "med5.com.br"
-            sans: ["*.med5.com.br"]
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
