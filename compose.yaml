@@ -28,5 +28,5 @@ volumes:
     name: traefik-certs
 
 networks:
-  med5-network:
+  frontend:
     name: frontend
