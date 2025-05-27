@@ -9,6 +9,14 @@ services:
       - no-new-privileges:true
     environment:
       - TZ=America/Sao_Paulo # Change this to your timezone
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik.rule=Host(`monitor.med5.com.br`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.tls=true"
+        - "traefik.http.routers.traefik.tls.certresolver=letencrypt"
+        - "traefik.http.services.traefik.loadbalancer.server.port=80"
+
     networks:
       - med5-network
     ports:
