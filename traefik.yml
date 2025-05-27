@@ -2,6 +2,10 @@ api:
   dashboard: true # Optional can be disabled
   insecure: true # Optional can be disabled
   debug: true # Optional can be Enabled if needed for troubleshooting 
+log:
+  level: "DEBUG" # Change to DEBUG for more verbose logging
+  #filePath: "/var/log/traefik.log" # Optional; specify a log file path
+  
 entryPoints:
   web:
     address: ":80"
