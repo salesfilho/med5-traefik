@@ -18,7 +18,9 @@ services:
     environment:
       - TZ=America/Sao_Paulo
     networks:
-      - med5-network
+      med5-network:
+        aliases:
+          - traefik
     labels:
       - "traefik.enable=true"
 
@@ -28,6 +30,10 @@ services:
     restart: unless-stopped
     env_file:
       - ./.env
+    networks:
+      med5-network:
+        aliases:
+          - api
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`h-backend.med5.com.br`) || PathPrefix(`/api`)"
@@ -36,8 +42,6 @@ services:
       - "traefik.http.routers.api.tls.certresolver=letsencrypt"
       - "traefik.http.routers.api.middlewares=secure-headers,api-strip-prefix,rate-limit"
       - "traefik.http.services.api.loadbalancer.server.port=8000"
-    networks:
-      - med5-network
     depends_on:
       - redis
       - traefik
@@ -48,6 +52,10 @@ services:
     restart: unless-stopped
     environment:
       - API_URL=https://h-backend.med5.com.br
+    networks:
+      med5-network:
+        aliases:
+          - app
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`h-app.med5.com.br`)"
@@ -56,8 +64,6 @@ services:
       - "traefik.http.routers.app.tls.certresolver=letsencrypt"
       - "traefik.http.routers.app.middlewares=secure-headers"
       - "traefik.http.services.app.loadbalancer.server.port=80"
-    networks:
-      - med5-network
     depends_on:
       - api
       - traefik
@@ -74,6 +80,8 @@ services:
 networks:
   med5-network:
     driver: bridge
+    attachable: true
+    internal: false
 
 volumes:
   redis_data:

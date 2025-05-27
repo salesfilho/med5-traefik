@@ -1,11 +1,11 @@
 global:
-  checkNewVersion: true
+  checkNewVersion: false
   sendAnonymousUsage: false
 
 api:
   dashboard: true
-  insecure: true # Set to false in production
-  debug: false
+  insecure: false
+  debug: true  # Ativar para diagnóstico
 
 entryPoints:
   web:
@@ -15,7 +15,6 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
-          permanent: true
 
   websecure:
     address: ":443"
@@ -23,8 +22,10 @@ entryPoints:
 providers:
   docker:
     exposedByDefault: false
-    network: med5-network
+    network: "med5-network"  # Especificar a rede explicitamente
     watch: true
+    swarmMode: false
+    useBindPortIP: false
   file:
     filename: "/etc/traefik/dynamic.yml"
     watch: true

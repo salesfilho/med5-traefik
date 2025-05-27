@@ -1,9 +1,9 @@
 http:
   middlewares:
-    authtraefik:
+    traefik-auth:
       basicAuth:
         users:
-          - "usuario:$2y$05$MBC2h4.kdM9D6WZTEVQj0.XeGxE/7Dz7qN3JtY6x1UZKUu5Jb9QaO" # Substitua pelo seu hash
+          - "usuario:$$2y$$05$$MBC2h4.kdM9D6WZTEVQj0.XeGxE/7Dz7qN3JtY6x1UZKUu5Jb9QaO"  # Substitua pelo hash real
 
     secure-headers:
       headers:
@@ -26,10 +26,10 @@ http:
         burst: 50
 
   routers:
-    traefik-router:
-      entryPoints: ["websecure"]
+    traefik-dashboard:
       rule: "Host(`monitor.med5.com.br`)"
+      entryPoints: ["websecure"]
       service: "api@internal"
-      middlewares: ["authtraefik"]
+      middlewares: ["traefik-auth"]
       tls:
         certResolver: "letsencrypt"
