@@ -21,7 +21,7 @@ services:
       - med5-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`monitor.med5.exemplo.com`)"
+      - "traefik.http.routers.traefik.rule=Host(`monitor.med5.com.br`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls=true"
@@ -30,7 +30,7 @@ services:
 
   # Backend API
   api:
-    build: ./backend
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/backend:test
     container_name: med5-api
     restart: unless-stopped
     env_file:
@@ -51,7 +51,7 @@ services:
 
   # Frontends (exemplo para app, repita para outros)
   app:
-    image: med5/app:latest
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/app:test
     container_name: med5-app
     restart: unless-stopped
     environment:
