@@ -1,0 +1,36 @@
+# dynamic_conf.yml
+http:
+  routers:
+    dashboard:
+      rule: Host(`traefik.med5.com.br`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "med5.com.br"
+            sans:
+              - "*.med5.com.br"
+      middlewares:
+        - auth
+
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "usuario:$2y$05$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          # Gerar hash com: htpasswd -nbB usuario senha | openssl base64
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      cipherSuites:
+        - "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+        - "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
+        - "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305"
+        - "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+        - "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
+        - "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      sniStrict: true
