@@ -64,20 +64,17 @@ services:
       - traefik_net
       - app-network
 
-  med5-transcript:
-    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/transcript:latest
-    container_name: med5-transcript
-    command: ./run.sh
-    restart: always
-    tty: true
-    working_dir: /srv/app
-    depends_on:
-      - redis
-    labels:
-      - "traefik.enable=true"
-    networks:
-      - traefik_net
-
+#  med5-transcript:
+#    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/transcript:latest
+#    container_name: med5-transcript
+#    command: ./run.sh
+#    restart: always
+#    tty: true
+#    working_dir: /srv/app
+#    labels:
+#      - "traefik.enable=true"
+#    networks:
+#      - traefik_net
 
   redis:
     image: redis:latest
