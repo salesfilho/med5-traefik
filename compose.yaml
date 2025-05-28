@@ -28,4 +28,8 @@ services:
 
 networks:
   traefik_net:
-    external: true
+    name: traefik_net
+    driver: bridge
+    attachable: true
+    # Configuração para criar a rede se não existir
+    external: false  # Isso permite que o compose crie a rede se não existir

@@ -1,0 +1,45 @@
+# traefik.yml
+api:
+  dashboard: true
+  insecure: false  # Desabilita o acesso HTTP não seguro ao dashboard
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: ":443"
+
+providers:
+  file:
+    filename: /etc/traefik/dynamic_conf.yml
+    watch: true
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: salesfilho@med5.com.br  # Substitua pelo seu e-mail
+      storage: /etc/traefik/acme.json
+      dnsChallenge:
+        provider: route53
+        delayBeforeCheck: 0
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+      # Configuração para certificado wildcard
+      certificatesDuration: 2160 # 90 dias
+      keyType: EC384 # Usando certificados ECC
+
+log:
+  level: INFO
+
+accessLog: {}
+
+# Configuração do Route 53
+# As credenciais podem ser fornecidas via variáveis de ambiente
+# AWS_ACCESS_KEY_ID e AWS_SECRET_ACCESS_KEY
