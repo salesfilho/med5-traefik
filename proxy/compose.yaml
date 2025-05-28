@@ -17,10 +17,6 @@ services:
       - ./traefik/acme.json:/etc/traefik/acme.json
     env_file:
       - ./.env
-#    environment:
-#      - AWS_ACCESS_KEY_ID=SUA_ACCESS_KEY_AWS
-#      - AWS_SECRET_ACCESS_KEY=SUA_SECRET_KEY_AWS
-#      - AWS_REGION=us-east-1  # Altere para sua região
     labels:
       - "traefik.enable=true"
     networks:

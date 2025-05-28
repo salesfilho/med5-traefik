@@ -1,0 +1,108 @@
+# dynamic_conf.yml
+http:
+  routers:
+    # Dashboard Traefik (existente)
+    dashboard:
+      rule: Host(`traefik.med5.com.br`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "med5.com.br"
+            sans:
+              - "*.med5.com.br"
+      middlewares:
+        - auth
+        - security-headers
+
+    # Aplicação MED5 - API
+#    med5-api:
+#      rule: Host(`api.med5.com.br`)
+#      service: med5-api
+#      entryPoints:
+#        - "websecure"
+#      tls:
+#        certResolver: letsencrypt
+#      middlewares:
+#        - security-headers
+#        - rate-limit
+
+    # Aplicação MED5 - App
+    med5-app:
+      #rule: Host(`h-app.med5.com.br`) || Host(`med5.com.br`)
+      rule: Host(`h-app.med5.com.br`) 
+      service: med5-app
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - security-headers
+        - redirect-https
+
+  services:
+#    med5-api:
+#      loadBalancer:
+#        servers:
+#          - url: "http://med5-api:3000"
+#        healthCheck:
+#          path: "/health"
+#          interval: "10s"
+
+    med5-app:
+      loadBalancer:
+        servers:
+          - url: "http://med5-app:80"
+
+  middlewares:
+    # Autenticação (existente)
+    auth:
+      basicAuth:
+        users:
+          - "med5adm:$2y$05$NPByyaaoarIF5/roFRtEnOli5pDf7t5qE0YBJRpWl2EnYz2YQguja"
+
+    # Segurança
+    security-headers:
+      headers:
+        sslRedirect: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        forceSTSHeader: true
+        sslHost: "med5.com.br"
+
+    # Rate Limiting
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+
+    # Redirecionamento HTTPS
+    redirect-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      cipherSuites:
+        - "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384"
+        - "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
+        - "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305"
+        - "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+        - "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
+        - "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      sniStrict: true
+
+  certificates:
+    - certFile: /etc/traefik/certs/med5.crt
+      keyFile: /etc/traefik/certs/med5.key
+      stores:
+        - default

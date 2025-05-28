@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Serviço do aplicativo med5
+  med5-app:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/app:test
+    container_name: med5-app
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+
+networks:
+  traefik_net:
+    name: traefik_net
+    driver: bridge
+    external: true  # Conectado na rede do Traefik existente
+
