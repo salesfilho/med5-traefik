@@ -1,6 +1,32 @@
 
 services:
   # Serviço do aplicativo med5
+  med5-hub:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/hub:test
+    container_name: med5-hub
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+
+  med5-manager:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/manager:test
+    container_name: med5-manager
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+
+  med5-panel:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/panel:test
+    container_name: med5-panel
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
   med5-app:
     image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/app:test
     container_name: med5-app
@@ -9,6 +35,8 @@ services:
       - "traefik.enable=true"
     networks:
       - traefik_net
+
+
 
   med5-api:
     image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/backend:test

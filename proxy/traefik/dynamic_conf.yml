@@ -51,18 +51,17 @@ http:
         - security-headers
         - rate-limit
 
-    med5-transcript:
-      rule: "Host(`h-backend.med5.com.br`) && PathPrefix(`/transcript/`)"
-      service: med5-transcript
-      entryPoints:
-        - "websecure"
-      tls:
-        certResolver: letsencrypt
-      middlewares:
-        - security-headers
-        - rate-limit
+#    med5-transcript:
+#      rule: "Host(`h-backend.med5.com.br`) && PathPrefix(`/transcript/`)"
+#      service: med5-transcript
+#      entryPoints:
+#        - "websecure"
+#      tls:
+#        certResolver: letsencrypt
+#      middlewares:
+#        - security-headers
+#        - rate-limit
 
-    # Aplicação MED5 - App
     med5-app:
       #rule: Host(`h-app.med5.com.br`) || Host(`med5.com.br`)
       rule: Host(`h-app.med5.com.br`) 
@@ -99,11 +98,25 @@ http:
         servers:
           - url: "http://med5-transcript:8002"
 
+    med5-hub:
+      loadBalancer:
+        servers:
+          - url: "http://med5-hub:8080"
+
+    med5-manager:
+      loadBalancer:
+        servers:
+          - url: "http://med5-manager:8083"
+
+    med5-panel:
+      loadBalancer:
+        servers:
+          - url: "http://med5-panel:8082"
+
     med5-app:
       loadBalancer:
         servers:
           - url: "http://med5-app:8081"
-
 
   middlewares:
     # Autenticação
@@ -150,8 +163,8 @@ tls:
         - "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
       sniStrict: true
 
-  certificates:
-    - certFile: /etc/traefik/certs/med5.crt
-      keyFile: /etc/traefik/certs/med5.key
-      stores:
-        - default
+#  certificates:
+#    - certFile: /etc/traefik/certs/med5.crt
+#      keyFile: /etc/traefik/certs/med5.key
+#      stores:
+#        - default
