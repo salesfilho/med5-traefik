@@ -54,7 +54,7 @@ http:
     med5-app:
       loadBalancer:
         servers:
-          - url: "http://med5-app:80"
+          - url: "http://med5-app:8081"
 
   middlewares:
     # Autenticação (existente)
