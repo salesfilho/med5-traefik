@@ -62,8 +62,40 @@ http:
 #        - security-headers
 #        - rate-limit
 
+    med5-hub:
+      rule: Host(`h-hub.med5.com.br`) 
+      service: med5-hub
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - security-headers
+        - redirect-https
+
+    med5-manager:
+      rule: Host(`h-manager.med5.com.br`) 
+      service: med5-app
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - security-headers
+        - redirect-https
+
+    med5-panel:
+      rule: Host(`h-panel.med5.com.br`) 
+      service: med5-app
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - security-headers
+        - redirect-https
+
     med5-app:
-      #rule: Host(`h-app.med5.com.br`) || Host(`med5.com.br`)
       rule: Host(`h-app.med5.com.br`) 
       service: med5-app
       entryPoints:
@@ -93,10 +125,10 @@ http:
         servers:
           - url: "http://med5-ws:8001"
 
-    med5-transcript:
-      loadBalancer:
-        servers:
-          - url: "http://med5-transcript:8002"
+#    med5-transcript:
+#      loadBalancer:
+#        servers:
+#          - url: "http://med5-transcript:8002"
 
     med5-hub:
       loadBalancer:
