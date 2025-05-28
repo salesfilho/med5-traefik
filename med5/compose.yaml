@@ -29,6 +29,55 @@ services:
     networks:
       - traefik_net
       - app-network
+  med5-meet:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/node:latest
+    container_name: med5-meet
+    command: node server.js
+    restart: always
+    tty: true
+    working_dir: /srv/app
+    depends_on:
+      - redis
+    volumes:
+      - static-content:/srv/app/static
+      - media-content:/srv/app/media
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+      - app-network
+  med5-ws:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/backend:test
+    container_name: med5-ws
+    command: ./run_ws.sh
+    restart: always
+    tty: true
+    working_dir: /srv/app
+    depends_on:
+      - redis
+    volumes:
+      - static-content:/srv/app/static
+      - media-content:/srv/app/media
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+      - app-network
+
+  med5-transcript:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/transcript:latest
+    container_name: med5-transcript
+    command: ./run.sh
+    restart: always
+    tty: true
+    working_dir: /srv/app
+    depends_on:
+      - redis
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+
 
   redis:
     image: redis:latest
