@@ -49,3 +49,9 @@ networks:
     name: app-network
     driver: bridge
     internal: true  # Isola serviços sensíveis
+
+
+#Volumes
+volumes:
+  static-content:
+  media-content:
