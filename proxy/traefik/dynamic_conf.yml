@@ -18,16 +18,16 @@ http:
         - security-headers
 
     # Aplicação MED5 - API
-#    med5-api:
-#      rule: Host(`api.med5.com.br`)
-#      service: med5-api
-#      entryPoints:
-#        - "websecure"
-#      tls:
-#        certResolver: letsencrypt
-#      middlewares:
-#        - security-headers
-#        - rate-limit
+    med5-api:
+      rule: Host(`h-backend.med5.com.br`)
+      service: med5-api
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - security-headers
+        - rate-limit
 
     # Aplicação MED5 - App
     med5-app:
@@ -43,13 +43,13 @@ http:
         - redirect-https
 
   services:
-#    med5-api:
-#      loadBalancer:
-#        servers:
-#          - url: "http://med5-api:3000"
-#        healthCheck:
-#          path: "/health"
-#          interval: "10s"
+    med5-api:
+      loadBalancer:
+        servers:
+          - url: "http://med5-api:8000"
+        #healthCheck:
+        #  path: "/health"
+        #  interval: "10s"
 
     med5-app:
       loadBalancer:

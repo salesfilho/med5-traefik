@@ -10,9 +10,42 @@ services:
     networks:
       - traefik_net
 
+  med5-api:
+    image: 761160219175.dkr.ecr.us-east-1.amazonaws.com/med5/backend:test
+    container_name: med5-api
+    command: ./run.sh
+    restart: always
+    tty: true
+    working_dir: /srv/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    volumes:
+      - static-content:/srv/app/static
+      - media-content:/srv/app/media
+    labels:
+      - "traefik.enable=true"
+    networks:
+      - traefik_net
+      - app-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    tty: true
+    networks:
+      - app-network
+
+
 networks:
   traefik_net:
     name: traefik_net
     driver: bridge
     external: true  # Conectado na rede do Traefik existente
 
+  app-network:
+    name: app-network
+    driver: bridge
+    internal: true  # Isola serviços sensíveis
